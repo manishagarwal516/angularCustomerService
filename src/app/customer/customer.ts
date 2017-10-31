@@ -6,9 +6,7 @@ export class Customer {
     public gender: string,
     public address: string,
     public city: string,
-    public state: string,
-    public latitude: number,
-    public longitude: number
+    public state: string
   ) {  }
 
 }

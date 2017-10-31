@@ -7,7 +7,17 @@ import { Customer }    from './customer';
   styleUrls: ['./customer-detail.component.css']
 })
 export class CustomerDetailComponent implements OnInit {
-	customer = new Customer('','','','','','',null,null);
+	customer = {
+		firstName: "Ted",
+   	lastName: "James",
+   	gender: "male",
+   	address: "1234 Anywhere St.",
+   	city: "Phoenix",
+   	state: {
+   		id : 10,
+   		name : "Arizona"
+   	}
+	}
   constructor() { }
 
   ngOnInit() {
