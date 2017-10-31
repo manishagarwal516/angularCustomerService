@@ -8,6 +8,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
   styleUrls: ['./customer-edit.component.css']
 })
 export class CustomerEditComponent implements OnInit {
+  title: string;
   customer : any;
   constructor(private router: Router, 
               private route: ActivatedRoute) { }
@@ -22,8 +23,10 @@ export class CustomerEditComponent implements OnInit {
   getCustomer(id){
   	console.log(id);
   	if (id !== 0) {
+      this.title = "Update Customer"
       this.customer = new Customer('Ted','James','male','1234 Anywhere St.','Phoenix','Arizona');
     }else{
+      this.title = "Add Customer"
       this.customer = new Customer('','','','','','');
     }
   }

@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
 	styleUrls: ['./customer.component.css']
 })
 export class CustomerComponent implements OnInit {
+	title: string = "Customers Info";
 	totalRecords: number = 0;
 	pageSize: number = 5;
 	customers = [];

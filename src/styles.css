@@ -144,6 +144,10 @@ a.navbar-brand {
     height:50px;
 }
 
+.navbar-global {
+  background-color: #c5aa6a;
+}
+
 footer {
     margin-top: 15px;
 }
