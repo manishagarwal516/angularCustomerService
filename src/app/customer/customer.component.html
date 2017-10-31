@@ -1,4 +1,4 @@
-'<div class="customers view indent">
+<div class="customers view indent">
     <div class="container">
         <header>
             <h3>
@@ -45,17 +45,8 @@
           [customers]="customers" 
           [hidden]="displayMode !== displayModeEnum.Grid"></app-customer-grid>
 
-        <!-- <app-map *ngIf="filteredCustomers.length" 
-            [zoom]="2" 
-            [enabled]="displayMode === displayModeEnum.Map" 
-            [hidden]="displayMode !== displayModeEnum.Map">
-          <app-map-point 
-            *ngFor="let customer of filteredCustomers" 
-            [latitude]="customer.latitude" 
-            [longitude]="customer.longitude"
-            [markerText]="'<h3>' + customer.firstName + ' ' + customer.lastName + '</a></h3>' + customer.city + ', ' + customer.state.name"></app-map-point>
-        </app-map> -->
-
+        <app-map *ngIf="displayMode === displayModeEnum.Map" 
+        ></app-map>
         <app-pagination
             [totalItems]="totalRecords" 
             [pageSize]="pageSize" 

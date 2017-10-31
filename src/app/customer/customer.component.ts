@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-	selector: 'app-custormer',
-	templateUrl: './custormer.component.html',
-	styleUrls: ['./custormer.component.css']
+	selector: 'app-customer',
+	templateUrl: './customer.component.html',
+	styleUrls: ['./customer.component.css']
 })
-export class CustormerComponent implements OnInit {
+export class CustomerComponent implements OnInit {
 	totalRecords: number = 0;
-	pageSize: number = 10;
+	pageSize: number = 5;
 	customers = [];
 	displayMode: DisplayModeEnum;
   	displayModeEnum = DisplayModeEnum;
