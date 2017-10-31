@@ -80,6 +80,7 @@ a.navbar-brand {
 
 .navbar-brand>img {
     display: inline-block;
+    width: 55px;
 }
 
 .navbar-inner {
