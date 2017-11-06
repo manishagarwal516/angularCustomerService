@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../core/auth.service';
+import { AuthService } from '../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -27,8 +27,15 @@ export class LoginComponent implements OnInit {
   }
 
   submit() {
-    this.auth.login();
-    this.router.navigate(['/customer']);
+   this.auth.login()
+      .subscribe((status: boolean) => {
+          if (status) {
+            this.router.navigate(['/customer']);
+          } else {
+              
+          }
+      },
+      (err: any) => console.log(err));
   }
 
 }

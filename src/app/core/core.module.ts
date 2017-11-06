@@ -1,13 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthService } from './auth.service';
+import { AuthService } from './services/auth.service';
+import { NavbarComponent } from './navbar/navbar.component';
+import { RouterModule } from '@angular/router';
+import { HttpModule } from '@angular/http';
+
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    RouterModule,
+    HttpModule
   ],
-  declarations: [],
+  declarations: [NavbarComponent],
   providers: [AuthService],
-  exports: []
+  exports: [NavbarComponent, RouterModule, HttpModule]
 })
 export class CoreModule { }
