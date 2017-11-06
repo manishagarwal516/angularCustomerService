@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
   }
 
   submit() {
-   this.auth.login()
+    this.auth.login(this.loginForm.value)
       .subscribe((status: boolean) => {
           if (status) {
             this.router.navigate(['/customer']);

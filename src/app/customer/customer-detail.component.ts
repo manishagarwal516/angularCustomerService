@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Customer }    from './customer';
+import { DataService } from '../core/services/data.service';
+import { ActivatedRoute, Params } from '@angular/router';
+
 
 @Component({
   selector: 'app-customer-detail',
@@ -7,20 +10,19 @@ import { Customer }    from './customer';
   styleUrls: ['./customer-detail.component.css']
 })
 export class CustomerDetailComponent implements OnInit {
-	customer = {
-		firstName: "Ted",
-   	lastName: "James",
-   	gender: "male",
-   	address: "1234 Anywhere St.",
-   	city: "Phoenix",
-   	state: {
-   		id : 10,
-   		name : "Arizona"
-   	}
-	}
-  constructor() { }
+	customer = {}
+  constructor(private data : DataService, private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.route.params.subscribe((params: Params) => {
+      console.log(params);
+      let id = +params['id'];
+      console.log(id);
+      this.data.getCustomer(id)
+        .subscribe((customerResponse: any) => {
+          this.customer = customerResponse.json[0];
+        });
+    });
   }
 
 }

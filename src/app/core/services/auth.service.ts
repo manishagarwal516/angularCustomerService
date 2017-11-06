@@ -1,5 +1,7 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
 import { Http, Response, RequestOptions, Headers } from '@angular/http';
+import { ConfigureService } from 'ng4-configure/ng4-configure';
+
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map'; 
@@ -8,40 +10,40 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class AuthService {
 	isAuthenticated: boolean = false;
-	authUrl: string = 'http://localhost:3000/oauth/token';
+	authUrl: string = this.configService.config.api_endpoint;
 
-  	constructor(private http: Http) { }
+  	constructor(private http: Http, public configService: ConfigureService) { }
 	@Output() authChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-	login(){
+	login(data: any){
 		let headers = new Headers();
   		headers.append('Content-Type', 'application/json');
   		let opts = new RequestOptions();
   		opts.headers = headers;
-		console.log("trest");
-		return this.http.post(this.authUrl ,{"grant_type":"password","username":"magarwal516@gmail.com","password":"test123","client_id":"system","client_secret":"f558ba166258089b2ef322c340554c"}, opts)
+
+  		data.username = data.email;
+  		data.grant_type = "password";
+  		data.client_id = this.configService.config.client_id;
+  		data.client_secret = this.configService.config.client_secret;
+  		delete data.email;
+
+		return this.http.post(this.authUrl + '/oauth/token', data, opts)
 			.map((response: Response) => {
-				console.log(response);
 			   	const loggedIn = response.json();
 			   	this.isAuthenticated = true;
+				localStorage.setItem('loggedIn', JSON.stringify({ token: loggedIn.access_token }));
 				this.authChanged.emit(true);
 				return true;
 		   	})
-		   .catch(this.handleError)
-
-		// this.http.get(this.authUrl ,opts)
-		// 	.map((response: Response) => {
-		// 		console.log(response);
-		// 	   	const loggedIn = response.json();
-		// 	   	this.isAuthenticated = true;
-		// 		this.authChanged.emit(true);
-		// 		console.log(this.isAuthenticated);
-		//    	})
-		//    .catch(this.handleError)
-		//    .subscribe();	
-		
+		   .catch(this.handleError);
 	}
 
+	checkforAuthentication(){
+		if (localStorage.getItem('loggedIn')) {
+            return true;
+        }
+        return false;
+	}
 	handleError(error: any) {
 		console.log('server error:', error); 
         if (error instanceof Response) {
@@ -58,8 +60,8 @@ export class AuthService {
 	
 	logout(){
 		this.isAuthenticated = false;
+		localStorage.removeItem('loggedIn');
 		this.authChanged.emit(false);
-		console.log(this.isAuthenticated);
 	}
 
 

@@ -17,7 +17,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   constructor(private authservice: AuthService, private router: Router) { }
 	loginOrOut() {
     const isAuthenticated = this.authservice.isAuthenticated;
-    if (isAuthenticated) {
+    if (this.authservice.checkforAuthentication()) {
       this.authservice.logout();
     }
     this.router.navigate(['/login']);
@@ -25,6 +25,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() { 
+    this.setLoginLogoutText();
     this.sub = this.authservice.authChanged
         .subscribe((loggedIn: boolean) => {
             this.setLoginLogoutText();
@@ -37,7 +38,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   setLoginLogoutText() {
-    this.loginLogoutText = (this.authservice.isAuthenticated) ? 'Logout' : 'Login';
-    this.showNavLinks = (this.authservice.isAuthenticated) ? true : false;
+    console.log("ssss");
+    this.loginLogoutText = (this.authservice.checkforAuthentication()) ? 'Logout' : 'Login';
+    this.showNavLinks = (this.authservice.checkforAuthentication()) ? true : false;
   }
 }

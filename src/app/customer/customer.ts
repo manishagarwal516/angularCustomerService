@@ -1,8 +1,9 @@
 export class Customer {
 
   constructor(
-    public firstName: string,
-    public lastName: string,
+  	public customer_id: number,
+    public first_name: string,
+    public last_name: string,
     public gender: string,
     public address: string,
     public city: string,

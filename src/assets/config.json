@@ -1,0 +1,5 @@
+{
+  "api_endpoint": "http://localhost:3000",
+  "client_id": "system",
+  "client_secret": "f558ba166258089b2ef322c340554c"
+}
