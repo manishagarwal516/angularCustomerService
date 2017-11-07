@@ -7,7 +7,7 @@ export class Customer {
     public gender: string,
     public address: string,
     public city: string,
-    public state: string
+    public state_id: number
   ) {  }
 
 }

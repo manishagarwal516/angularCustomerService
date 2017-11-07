@@ -14,12 +14,19 @@ export class OrderComponent implements OnInit {
   constructor(private data : DataService) { }
 
   ngOnInit() {
-    this.data.getOrders()
+    this.getOrderPage(1);
+  }
+
+  getOrderPage(page: number){
+    this.data.getOrders(page)
       .subscribe((response: any) => {
         console.log(response);
-      this.customers = response.json;
-      this.totalRecords = response.json.length;
+      this.customers = response.json.records;
+      this.totalRecords = response.json.count;
     });
   }
 
+  pageChanged(page: number) {
+    this.getOrderPage(page);
+  }
 }

@@ -10,8 +10,18 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
   styleUrls: ['./customer-edit.component.css']
 })
 export class CustomerEditComponent implements OnInit {
-  title: string;
-  customer : any;
+  title: string = "Add Customer";
+  buttonText: string = "Add";
+  customerInfo: any;
+  customer = {
+    customer_id: 0,
+    first_name: '',
+    last_name: '',
+    gender: 'male',
+    address: '',
+    city: '',
+    state_id : 1
+  }
   states: any;
 
   constructor(private router: Router, 
@@ -33,7 +43,12 @@ export class CustomerEditComponent implements OnInit {
     if(this.customer.customer_id){
       this.data.updateCustomer(this.customer.customer_id, this.customer)
         .subscribe((customerResponse: any) => {
-          console.log(customerResponse);
+          if(customerResponse.status === "success"){
+            alert("User Updated Successfully");
+            this.router.navigate(['/customer']);
+          }else{
+            alert("Error in updating the User");
+          }
       });
     }else{
       this.data.createCustomer(this.customer)
@@ -42,18 +57,21 @@ export class CustomerEditComponent implements OnInit {
       });
     }
   }
-
+  reset(id){
+    if (id !== 0) 
+      this.customer = new Customer(this.customerInfo.customer_id, this.customerInfo.first_name,this.customerInfo.last_name, this.customerInfo.gender,this.customerInfo.address, this.customerInfo.city,this.customerInfo.state_id);
+    else
+      this.customer = new Customer(0, '','','male','','', 1);
+  }
   getCustomer(id){
   	if (id !== 0) {
-      this.title = "Update Customer"
+      this.title = "Update Customer";
+      this.buttonText = "Update";
       this.data.getCustomer(id)
         .subscribe((customerResponse: any) => {
-          let customerInfo = customerResponse.json[0];
-          this.customer = new Customer(customerInfo.customer_id, customerInfo.first_name,customerInfo.last_name, customerInfo.gender,customerInfo.address, customerInfo.city,'Arizona');
+          this.customerInfo = customerResponse.json[0];
+          this.customer = new Customer(this.customerInfo.customer_id, this.customerInfo.first_name,this.customerInfo.last_name, this.customerInfo.gender,this.customerInfo.address, this.customerInfo.city,this.customerInfo.state_id);
       });
-    }else{
-      this.title = "Add Customer"
-      this.customer = new Customer(0, '','', '','', '','Arizona');
     }
   }
 

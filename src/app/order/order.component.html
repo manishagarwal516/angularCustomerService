@@ -19,7 +19,7 @@
                         </tr>
                         <tr class="summary-border">
                             <td>&nbsp;</td>
-                            <td class="text-right">{{ 30 | currency:'USD':true }}
+                            <td class="text-right">{{ customer.order_total | currency:'USD':true }}
                         </tr>
                     </table>
                     <div *ngIf="!customer.orders || !customer.orders.length">
@@ -37,6 +37,5 @@
                 No customers found
             </div>
         </div>
-
     </div>
 </div>

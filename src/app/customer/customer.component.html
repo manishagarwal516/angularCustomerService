@@ -32,7 +32,9 @@
                             </a>
                         </li>
                     </ul>
-                    
+                    <div class="navbar-right">
+                         Filter: <input type="text" name="filter" id="filter" [(ngModel)]="filter" (keyup)="filterChanged()"/>
+                    </div>
                 </div>
             </div>
         </div>
@@ -48,10 +50,9 @@
         <app-map *ngIf="displayMode === displayModeEnum.Map" 
             [customers]="customers"
         ></app-map>
-        <app-pagination
+        <app-pagination 
             [totalItems]="totalRecords" 
             [pageSize]="pageSize" 
             (pageChanged)="pageChanged($event)"></app-pagination>
-          
     </div>
 </div>

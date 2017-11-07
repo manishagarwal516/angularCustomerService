@@ -19,7 +19,7 @@
                             </a>
                         </div>
                         <div class="pull-left card-body-right">
-                            <div class="card-body-content">{{customer.city  }}, UTAH</div>
+                            <div class="card-body-content">{{customer.city }}, {{customer.state_name}}</div>
                             <a [routerLink]="['/customer',customer.customer_id,'orders']">View Orders</a>
                         </div>
                     </div>

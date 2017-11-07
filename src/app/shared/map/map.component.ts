@@ -1,13 +1,12 @@
-import { Component, OnInit, Input, ViewChild, ElementRef} from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, OnChanges, SimpleChanges} from '@angular/core';
 declare let google: any;
-
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.css']
 })
-export class MapComponent implements OnInit {
+export class MapComponent implements OnInit, OnChanges {
   @Input() customers: any[] = [];
   @ViewChild('mapContainer') mapDiv : ElementRef;
 
@@ -15,14 +14,13 @@ export class MapComponent implements OnInit {
 
   private renderMap(){
     const options = {
-      zoom: 16,
       mapTypeControl: true,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     let map = new google.maps.Map(this.mapDiv.nativeElement, options);
     let infowindow = new google.maps.InfoWindow();
     let geocoder = new google.maps.Geocoder();
-    let  marker;
+    let marker;
     let bounds = new google.maps.LatLngBounds();
 
     this.customers.forEach(function(customer, key) {
@@ -35,24 +33,19 @@ export class MapComponent implements OnInit {
             map: map,
             position: results[0].geometry.location
           });
-          bounds.extend(results[0].geometry.location)
+          bounds.extend(results[0].geometry.location);
           google.maps.event.addListener(marker, 'click', (function(marker, i) {
             return function() {
               infowindow.setContent(name);
               infowindow.open(map, marker);
             }
           })(marker, key));
+             map.fitBounds(bounds);
         } else {
           alert('Geocode was not successful for the following reason: ' + status);
         }
       });
     });
-
-    if (this.customers.length === 1) {
-      map.setZoom(16);
-    } else {
-       map.fitBounds(bounds);
-    }
   }
 
   ensureScript(){
@@ -78,5 +71,13 @@ export class MapComponent implements OnInit {
         this.ensureScript();
       }, 200);
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+    for (let propName in changes) {
+      if(propName === "customers"){
+        this.ensureScript();
+      }
+    }
+  }  
 
 }

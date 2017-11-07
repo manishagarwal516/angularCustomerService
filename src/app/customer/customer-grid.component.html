@@ -12,7 +12,6 @@
                             <th cm-sort-by="city" (sorted)="sort($event)">City</th>
                             <th cm-sort-by="state.name" (sorted)="sort($event)">State</th>
                             <!-- Or you can do this directly rather than using sort-by directive -->
-                            <th (click)="sort('orderTotal')">Order Total</th>
                             <th>&nbsp;</th>
                         </tr>
                     </thead>
@@ -20,13 +19,12 @@
                         <tr *ngFor="let customer of customers">
                             <td><img src="assets/images/{{ customer.gender | lowercase }}.png"
                                     class="grid-image" alt="Customer Image" /></td>
-                            <td><a [routerLink]="['/customer',customer.id,'details']">{{ customer.first_name | capitalize }}</a></td>
+                            <td><a [routerLink]="['/customer',customer.customer_id,'details']">{{ customer.first_name | capitalize }}</a></td>
                             <td>{{ customer.last_name | capitalize }}</td>
                             <td>{{ customer.address }}</td>
                             <td>{{ customer.city  }}</td>
-                            <td>{{ customer.first_name }}</td>
-                            <td>{{ customer.orderTotal | currency:'USD':true }}</td>
-                            <td><a [routerLink]="['/customer',customer.id,'orders']">View Orders</a></td>
+                            <td>{{ customer.state_name }}</td>
+                            <td><a [routerLink]="['/customer',customer.customer_id,'orders']">View Orders</a></td>
                         </tr>
                         <tr *ngIf="!customers.length">
                             <td>&nbsp;</td>

@@ -12,26 +12,28 @@ export class DataService {
 	dataurl: string = this.configService.config.api_endpoint;
   	constructor(private http: Http, public configService: ConfigureService) { }
 
-  	getCustomers(){
+  	getCustomers(page,filter){
+  		let filterUrl =  '';
 		let headers = new Headers();
   		headers.append('Content-Type', 'application/json');
   		let opts = new RequestOptions();
   		opts.headers = headers;
-
-		return this.http.get(this.dataurl + '/customers',opts)
+  		if(filter)
+  			filterUrl = "&filter_key=customer_name&filter=" + filter;
+		return this.http.get(this.dataurl + '/customers?page='+page+filterUrl,opts)
 			.map((response: Response) => {
 			   	return response.json();
 		   	})
 		.catch(this.handleError);
 	}
 
-	getOrders(){
+	getOrders(page){
 		let headers = new Headers();
   		headers.append('Content-Type', 'application/json');
   		let opts = new RequestOptions();
   		opts.headers = headers;
 
-		return this.http.get(this.dataurl + '/orders',opts)
+		return this.http.get(this.dataurl + '/orders?page='+page,opts)
 			.map((response: Response) => {
 			   	return response.json();
 		   	})
@@ -69,7 +71,6 @@ export class DataService {
   		headers.append('Content-Type', 'application/json');
   		let opts = new RequestOptions();
   		opts.headers = headers;
-  		delete customerData.state;
 		return this.http.put(this.dataurl + '/customers/' + id,customerData,opts)
 			.map((response: Response) => {
 			   	return response.json();

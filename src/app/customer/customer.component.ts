@@ -8,6 +8,7 @@ import { DataService } from '../core/services/data.service';
 })
 export class CustomerComponent implements OnInit {
 	title: string = "Customers Info";
+	filter: string = "";
 	totalRecords: number = 0;
 	pageSize: number = 5;
 	customers = [];
@@ -21,12 +22,10 @@ export class CustomerComponent implements OnInit {
 	constructor(private data : DataService) { }
 
 	getCustomersPage(page: number) {
-
-		this.data.getCustomers()
+		this.data.getCustomers(page, this.filter)
       	.subscribe((response: any) => {
-        	console.log(response);
-	    	this.customers = response.json;
-	    	this.totalRecords = response.json.length;
+	    	this.customers = response.json.records;
+	    	this.totalRecords = response.json.count;
 	    });
   	}
 	ngOnInit() {
@@ -38,8 +37,12 @@ export class CustomerComponent implements OnInit {
       this.displayMode = mode;
   	}
 
-}
+  	filterChanged(){
+  		this.getCustomersPage(1);
+  	}
 
+
+}
 enum DisplayModeEnum {
   Card = 0,
   Grid = 1,
