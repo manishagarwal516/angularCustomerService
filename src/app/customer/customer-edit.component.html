@@ -1,4 +1,3 @@
-{{states}}
 <div class="container">
     <header>
       <h3>
@@ -9,7 +8,6 @@
     <h1>Customer Form</h1>
     <form #customerForm="ngForm" (ngSubmit)="saveCustomer()">
       <div class="form-group">
-        {{customer}}
         <label for="fname">First Name</label>
         <input type="text" class="form-control" id="fname" name="fname" [(ngModel)]="customer.first_name" required #fname="ngModel">
         <div [hidden]="fname.valid || fname.pristine"

@@ -46,6 +46,7 @@
           [hidden]="displayMode !== displayModeEnum.Grid"></app-customer-grid>
 
         <app-map *ngIf="displayMode === displayModeEnum.Map" 
+            [customers]="customers"
         ></app-map>
         <app-pagination
             [totalItems]="totalRecords" 

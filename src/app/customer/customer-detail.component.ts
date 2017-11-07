@@ -10,7 +10,8 @@ import { ActivatedRoute, Params } from '@angular/router';
   styleUrls: ['./customer-detail.component.css']
 })
 export class CustomerDetailComponent implements OnInit {
-	customer = {}
+	customer = {};
+  customerInfoForMap = [];
   constructor(private data : DataService, private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -20,7 +21,8 @@ export class CustomerDetailComponent implements OnInit {
       console.log(id);
       this.data.getCustomer(id)
         .subscribe((customerResponse: any) => {
-          this.customer = customerResponse.json[0];
+          this.customerInfoForMap = customerResponse.json;
+          this.customer = this.customerInfoForMap[0];
         });
     });
   }

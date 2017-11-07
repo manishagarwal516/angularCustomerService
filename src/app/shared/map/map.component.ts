@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-declare var google: any;
+import { Component, OnInit, Input, ViewChild, ElementRef} from '@angular/core';
+declare let google: any;
 
 
 @Component({
@@ -8,53 +8,75 @@ declare var google: any;
   styleUrls: ['./map.component.css']
 })
 export class MapComponent implements OnInit {
-	private map: any;
+  @Input() customers: any[] = [];
+  @ViewChild('mapContainer') mapDiv : ElementRef;
 
   constructor() { }
 
-  onMapsReady(){
-  	console.log("ghghg");
-  	var locations = [
-      ['Traveller A', -33.890542, 151.274856, 4],
-      ['Traveller B', -33.923036, 151.259052, 5],
-      ['Traveller C', -34.028249, 151.157507, 3],
-      ['Traveller D', -33.80010128657071, 151.28747820854187, 2],
-      ['Traveller E', -33.950198, 151.259302, 1]
-    ];
-
-    var map = new google.maps.Map(document.getElementById('map-canvas'), {
-      zoom: 7,
-      center: new google.maps.LatLng(-33.923036, 151.259052),
+  private renderMap(){
+    const options = {
+      zoom: 16,
       mapTypeControl: true,
       mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    let map = new google.maps.Map(this.mapDiv.nativeElement, options);
+    let infowindow = new google.maps.InfoWindow();
+    let geocoder = new google.maps.Geocoder();
+    let  marker;
+    let bounds = new google.maps.LatLngBounds();
+
+    this.customers.forEach(function(customer, key) {
+      let address = customer.address + ","+ customer.city;
+      geocoder.geocode({'address': address}, function(results, status) {
+        let name = customer.first_name + " " + customer.last_name;
+        if (status === 'OK') {
+          map.setCenter(results[0].geometry.location);
+          marker = new google.maps.Marker({
+            map: map,
+            position: results[0].geometry.location
+          });
+          bounds.extend(results[0].geometry.location)
+          google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+              infowindow.setContent(name);
+              infowindow.open(map, marker);
+            }
+          })(marker, key));
+        } else {
+          alert('Geocode was not successful for the following reason: ' + status);
+        }
+      });
     });
 
-    var infowindow = new google.maps.InfoWindow();
-
-    var marker, i;
-
-    for (i = 0; i < locations.length; i++) {  
-      marker = new google.maps.Marker({
-        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-        map: map
-      });
-
-      google.maps.event.addListener(marker, 'click', (function(marker, i) {
-        return function() {
-          infowindow.setContent(locations[i][0]);
-          infowindow.open(map, marker);
-        }
-      })(marker, i));
+    if (this.customers.length === 1) {
+      map.setZoom(16);
+    } else {
+       map.fitBounds(bounds);
     }
   }
 
+  ensureScript(){
+    const document = this.mapDiv.nativeElement.ownerDocument;
+    const script = <HTMLScriptElement>document.querySelector('script[id="googlemaps"]');
+    if (script) {
+      this.renderMap();
+    } else {
+      const script = document.createElement('script');
+      script.id = 'googlemaps';
+      script.type = 'text/javascript';
+      script.async = true;
+      script.defer = true;
+      script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAMevS2XHJBA7Rf8T-Or9KjzG_2QCCwp0w';
+      script.onload = () => {
+        this.renderMap();
+      };      
+      document.body.appendChild(script);
+     }
+  }
   ngOnInit() {
-  	(<any>window).googleMapsReady=this.onMapsReady.bind(this);
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    document.getElementsByTagName("head")[0].appendChild(script);
-    script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyAMevS2XHJBA7Rf8T-Or9KjzG_2QCCwp0w&callback=googleMapsReady";
-
+    setTimeout(() => {
+        this.ensureScript();
+      }, 200);
   }
 
 }
